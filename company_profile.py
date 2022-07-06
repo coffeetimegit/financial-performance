@@ -2,7 +2,7 @@ import DriverClass
 from selenium import webdriver
 import pandas as pd
 
-web_elements = DriverClass.ReportDriver(driver_path="/Users/yutakaobi/PycharmProjects/CompanyProfile/edgedriver_mac64 2/msedgedriver",
+web_elements = DriverClass.ReportDriver(driver_path="CHROMEDRIVER_PATH",
                                          update_date_xpath="/td[1]/div",
                                          company_xpath="/td[4]/a",
                                          pdf_xpath="/td[6]/div/a",
