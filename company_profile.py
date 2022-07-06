@@ -95,8 +95,8 @@ def page_count(url_list_xpath):
 
 
 def get_reports(df, company_list, pages):
-    for i in range(pages - 28):
-        url = get_url(i * 100)
+    for i in range(pages):
+        url = get_url(i * 10 0)
         driver.get(url)
         df, company_list = filter_irrelevant_rows(df, table_row_xpath,
                                                   company_list, f"{table_row_xpath}{company_xpath}",
