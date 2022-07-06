@@ -1,3 +1,31 @@
+import DriverClass
+from selenium import webdriver
+import pandas as pd
+
+web_elements = DriverClass.ReportDriver(driver_path="/Users/yutakaobi/PycharmProjects/CompanyProfile/edgedriver_mac64 2/msedgedriver",
+                                         update_date_xpath="/td[1]/div",
+                                         company_xpath="/td[4]/a",
+                                         pdf_xpath="/td[6]/div/a",
+                                         table_row_xpath="//*[@id='control_object_class1']/div/div[8]/table/tbody/tr",
+                                         url_list_xpath="//*[@id='pageTop']/span/a")
+#print(web_elements.driver_path)
+driver = DriverClass.ReportDriver.webdriver_instance(web_elements)
+"""
+#path = '/Users/yutakaobi/PycharmProjects/CompanyProfile/edgedriver_mac64 2/msedgedriver'
+print(path)
+desired_cap = {}
+driver = webdriver.Edge(executable_path=path, capabilities=desired_cap)
+"""
+
+pages = DriverClass.ReportDriver.page_count(web_elements, driver)
+df = pd.DataFrame(columns=["company", "update_date", "pdf_report"])
+company_list = set()
+df = DriverClass.ReportDriver.get_reports(web_elements, df, company_list, pages, driver)
+df.to_csv("company_performance.csv", index=False)
+print(df)
+
+driver.quit()
+"""
 from selenium import webdriver
 import time
 import pandas as pd
@@ -132,3 +160,6 @@ df.to_csv("company_performance.csv", index=False)
 print(df)
 
 driver.quit()
+
+
+"""
