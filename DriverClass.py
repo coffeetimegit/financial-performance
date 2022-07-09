@@ -133,4 +133,5 @@ class ReportDriver:
 
         df = df.sort_values(by=['提出日時'], ascending=False)
         df = self.transform_df(df)
+
         return df
