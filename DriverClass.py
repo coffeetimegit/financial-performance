@@ -4,24 +4,28 @@ import pandas as pd
 from datetime import datetime
 import os
 
+
 class ReportDriver:
-    def __init__(self, driver_path, update_date_xpath, company_xpath, pdf_xpath, table_row_xpath, url_list_xpath):
+    def __init__(self, driver_path, driver_bin, update_date_xpath, company_xpath, pdf_xpath, table_row_xpath, url_list_xpath, fund_code):
         self.driver_path = driver_path
+        self.driver_bin = driver_bin
         self.update_date_xpath = update_date_xpath
         self.company_xpath = company_xpath
         self.pdf_xpath = pdf_xpath
         self.table_row_xpath = table_row_xpath
         self.url_list_xpath = url_list_xpath
+        self.fund_code = fund_code
 
     def webdriver_instance(self):
 
         op = webdriver.ChromeOptions()
-        op.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        op.binary_location = os.environ.get(self.driver_bin)
         op.add_argument("--headless")
         op.add_argument("--no-sandbox")
         op.add_argument("--disable-dev-sh-usage")
         driver = webdriver.Chrome(executable_path=os.environ.get(self.driver_path), chrome_options=op)
         return driver
+
 
     def convert_date(self, jpn_date):
         if jpn_date[0] == "R":
@@ -39,7 +43,7 @@ class ReportDriver:
 
         return datetime.strptime(update_date, "%Y%m%d %H:%M")
 
-    def filter_irrelevant_rows(self, df, company_list, driver):
+    def filter_irrelevant_rows(self, df, driver):
         start = time.time()
         filenames = driver.find_elements_by_xpath(self.table_row_xpath)
         filename = [i.text.split()[2] for i in filenames]
@@ -53,75 +57,85 @@ class ReportDriver:
         print(f"IO bound operation took {round(end - start, 2)} second(s) to complete.")
 
         # vectorize with pandas
+
+        if len(companies) == 0:
+            return df
+
         start = time.time()
-        target_df = pd.DataFrame({"filename": filename[1:],
-                                  "company": companies,
-                                  "update_date": update_date,
-                                  "pdf_report": pdfs})
-        filt = ((target_df["filename"].str.contains("有価証券報告書")) & (~target_df["filename"].str.contains("訂正")) & (
-            ~target_df["company"].isin(company_list)))
+        target_df = pd.DataFrame({"提出書類": filename[1:],
+                                  "提出者／ファンド": companies,
+                                  "提出日時": update_date,
+                                  "pdf": pdfs})
+
+        filt = (~target_df["提出書類"].str.contains("訂正") & (target_df["提出書類"].str.contains("報告書")))
         df_filtered = target_df[filt]
-        df_filtered.drop_duplicates(subset=["company"], inplace=True)
-        df_filtered.drop("filename", axis=1, inplace=True)
+
         df = pd.concat([df, df_filtered], ignore_index=True)
 
         end = time.time()
         print(f"CPU bound operation took {round(end - start, 2)} second(s) to complete.")
-        # print(df_filtered)
-        # df_filtered.to_csv(f"{time.time()}.csv", index=False)
 
-        companies_unique = set(companies)
-        if company_list:
-            for i in companies_unique:
-                if i not in company_list:
-                    company_list.add(i)
-            # print(f"if clause: {company_list}")
+        return df
 
-        else:
-            company_list = set(companies)
-            # print(f"else clause: {company_list}")
-
-        # print(df_filtered)
-
-        end = time.time()
-
-        return [df, company_list]
-
-
-
-
-
-    def output(self, filtered_list):
-        for k, v in filtered_list.items():
-            print(k, v[0], v[1])
 
 
     def get_url(self, index):
-        url_prefix = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb=W1E63011CXP001002Action&uji.bean=ee.bean" \
-                     ".parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011&SESSIONKEY=1656758727065&lgKbn=2&pkbn=0&skbn=1&dskb=&askb" \
-                     "=&dflg=0&iflg=0&preId=1&mul=&fls=on&cal=2&yer=&mon=&pfs=4&row=100&idx="
+
+
+        url_prefix = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb=W1E63011CXP001002Action" \
+                     "&uji.bean=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011&SESSIONKEY=1657207893643" \
+                     "&lgKbn=2&pkbn=0&skbn=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul="
+
+        url_middle = "&fls=on&cal=1&era=R&yer=&mon=&pfs=4&row=100&idx="
+
         url_suffix = "&str=&kbn=1&flg=&syoruiKanriNo= "
 
-        return f"{url_prefix}{index}{url_suffix}"
-
+        return f"{url_prefix}{self.fund_code}{url_middle}{index}{url_suffix}"
 
     def page_count(self, driver):
-        url = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb=W1E63011CXP001002Action&uji.bean" \
-              "=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011&SESSIONKEY=1656759278844&lgKbn=2&pkbn=0&skbn" \
-              "=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul=&fls=on&cal=2&yer=&mon=&pfs=4&row=100&idx=0&str=&kbn=1&flg" \
-              "=&syoruiKanriNo= "
+        url_prefix = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb" \
+                     "=W1E63011CXW1E6A011DSPSch&uji.bean=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011" \
+                     "&SESSIONKEY=1657205483096&lgKbn=2&pkbn=0&skbn=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul="
+
+        url_suffix = "&fls=on&cal=1&era=R&yer=&mon=&pfs=4&row=100&idx=0&str=&kbn=1&flg=&syoruiKanriNo= "
+
+        url = f"{url_prefix}{self.fund_code}{url_suffix}"
+
         driver.get(url)
-        print(len(driver.find_elements_by_xpath(self.url_list_xpath)) - 1)
+
         return len(driver.find_elements_by_xpath(self.url_list_xpath)) - 1
 
 
-    def get_reports(self, df, company_list, pages, driver):
-        for i in range(pages-27):
+    def transform_df(self, df):
+
+        提出日時 = list(df['提出日時'])
+        提出者ファンド = list(df['提出者／ファンド'])
+        提出書類 = list(df['提出書類'])
+        pdf = list(df['pdf'])
+        size = len(提出日時)
+
+        reports = []
+        for i in range(size):
+            reports.append([提出日時[i], 提出者ファンド[i], 提出書類[i], pdf[i]])
+        return reports
+
+    def get_reports(self, df, pages, driver):
+        if pages == 0:
+            url = self.get_url(0)
+            driver.get(url)
+            df = self.filter_irrelevant_rows(df, driver)
+
+        for i in range(pages):
+            print("iterate")
             url = self.get_url(i * 100)
             driver.get(url)
-            df, company_list = self.filter_irrelevant_rows(df, company_list, driver)
+            df = self.filter_irrelevant_rows(df, driver)
 
+        df = df.sort_values(by=['提出日時'], ascending=False)
+        df = self.transform_df(df)
         return df
+
+
 
 """
 op = webdriver.ChromeOptions()
@@ -131,7 +145,6 @@ op.add_argument("--no-sandbox")
 op.add_argument("--disable-dev-sh-usage")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=op)
 """
-
 
 """
 path = '/Users/yutakaobi/PycharmProjects/CompanyProfile/edgedriver_mac64 2/msedgedriver'
@@ -157,4 +170,5 @@ print(df)
 
 driver.quit()
 """
+
 

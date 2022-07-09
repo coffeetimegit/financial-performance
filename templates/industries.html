@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>報告書Finder: 業界別</title>
+</head>
+<body>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="card" style="width: auto;">
+  <ul class="list-group list-group-flush">
+      {% for industry in industry_list %}
+      <li class="list-group-item" >
+          <a href="{{url_for('company_list', company=industry)}}">{{industry}}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
+</body>
+</html>

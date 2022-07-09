@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="efdf91a9-e85f-4dda-9989-0250a859339c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/basic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/industries.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/selenium_deploy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/selenium_deploy.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/company_profile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DriverClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/DriverClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company_performance.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/company_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/all_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -34,11 +40,22 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/yutakaobi/PycharmProjects/selenium_deploy/templates&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/templates" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration name="company_profile" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="basic" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="selenium_deploy" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -50,7 +67,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/company_profile.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/basic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />

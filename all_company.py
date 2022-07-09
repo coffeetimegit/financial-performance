@@ -1,15 +1,33 @@
 import DriverClass
-from selenium import webdriver
 import pandas as pd
 
-web_elements = DriverClass.ReportDriver(driver_path="CHROMEDRIVER_PATH",
-                                         update_date_xpath="/td[1]/div",
-                                         company_xpath="/td[4]/a",
-                                         pdf_xpath="/td[6]/div/a",
-                                         table_row_xpath="//*[@id='control_object_class1']/div/div[8]/table/tbody/tr",
-                                         url_list_xpath="//*[@id='pageTop']/span/a")
-#print(web_elements.driver_path)
-driver = DriverClass.ReportDriver.webdriver_instance(web_elements)
+
+def main(code):
+    web_elements = DriverClass.ReportDriver(driver_path="CHROMEDRIVER_PATH",
+                                            driver_bin="GOOGLE_CHROME_BIN",
+                                            update_date_xpath="/td[1]/div",
+                                            company_xpath="/td[4]/a",
+                                            pdf_xpath="/td[6]/div/a",
+                                            table_row_xpath="/html/body/div/div[1]/div/div/div[2]/div/form/div/div[7]/table/tbody/tr",
+                                            url_list_xpath="//*[@id='pageTop']/span/a",
+                                            fund_code=code)
+    driver = DriverClass.ReportDriver.webdriver_instance(web_elements)
+    df = pd.DataFrame(columns=["提出書類", "提出者／ファンド", "提出日時", "pdf"])
+    pages = DriverClass.ReportDriver.page_count(web_elements, driver) + 1
+
+    reports = DriverClass.ReportDriver.get_reports(web_elements, df, pages, driver)
+
+    driver.quit()
+
+    return reports
+
+
+if __name__ == "__main__":
+    main()
+
+# print(web_elements.driver_path)
+
+
 """
 #path = '/Users/yutakaobi/PycharmProjects/CompanyProfile/edgedriver_mac64 2/msedgedriver'
 print(path)
@@ -17,14 +35,6 @@ desired_cap = {}
 driver = webdriver.Edge(executable_path=path, capabilities=desired_cap)
 """
 
-pages = DriverClass.ReportDriver.page_count(web_elements, driver)
-df = pd.DataFrame(columns=["company", "update_date", "pdf_report"])
-company_list = set()
-df = DriverClass.ReportDriver.get_reports(web_elements, df, company_list, pages, driver)
-df.to_csv("company_performance.csv", index=False)
-print(df)
-
-driver.quit()
 """
 from selenium import webdriver
 import time
