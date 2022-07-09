@@ -1,1 +1,1 @@
-web: python company_profile.py
+web: gunicorn app:app
