@@ -81,23 +81,23 @@ class ReportDriver:
 
     def get_url(self, index):
 
+
         url_prefix = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb=W1E63011CXP001002Action" \
-                     "&uji.bean=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011&SESSIONKEY=1658415028006" \
+                     "&uji.bean=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011&SESSIONKEY=1657207893643" \
                      "&lgKbn=2&pkbn=0&skbn=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul="
 
-        url_middle = "&fls=on&cal=1&era=R&yer=&mon=&pfs=5&row=100&idx="
+        url_middle = "&fls=on&cal=1&era=R&yer=&mon=&pfs=4&row=100&idx="
 
-        url_suffix = "E08957900&str=&kbn=1&flg=&syoruiKanriNo= "
+        url_suffix = "&str=&kbn=1&flg=&syoruiKanriNo= "
 
         return f"{url_prefix}{self.fund_code}{url_middle}{index}{url_suffix}"
 
     def page_count(self, driver):
-
         url_prefix = "https://disclosure.edinet-fsa.go.jp/E01EW/BLMainController.jsp?uji.verb" \
                      "=W1E63011CXW1E6A011DSPSch&uji.bean=ee.bean.parent.EECommonSearchBean&TID=W1E63011&PID=W1E63011" \
-                     "&SESSIONKEY=1658415020516&lgKbn=2&pkbn=0&skbn=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul="
+                     "&SESSIONKEY=1657205483096&lgKbn=2&pkbn=0&skbn=1&dskb=&askb=&dflg=0&iflg=0&preId=1&mul="
 
-        url_suffix = "&fls=on&cal=1&era=R&yer=&mon=&pfs=5&row=100&idx=0&str=&kbn=1&flg=&syoruiKanriNo= "
+        url_suffix = "&fls=on&cal=1&era=R&yer=&mon=&pfs=4&row=100&idx=0&str=&kbn=1&flg=&syoruiKanriNo= "
 
         url = f"{url_prefix}{self.fund_code}{url_suffix}"
 
